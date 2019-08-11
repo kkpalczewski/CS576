@@ -1,61 +1,497 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
 <head>
-<title>Mathedemo</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+<title>LaTeX4Web 1.4 OUTPUT</title>
+<style type="text/css">
+<!--
+ body {color: black;  background:"#FFCC99";  }
+ div.p { margin-top: 7pt;}
+ td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}
+ td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}
+ td div.norm {line-height:normal;}
+ td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}
+ td.sqrt {border-top:2 solid black;
+          border-left:2 solid black;
+          border-bottom:none;
+          border-right:none;}
+ table.sqrt {border-top:2 solid black;
+             border-left:2 solid black;
+             border-bottom:none;
+             border-right:none;}
+-->
+</style>
 </head>
-
 <body>
-<h2>Math in TeX notation</h2>
 
-When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
-$$ \begin{array}{rcll}
-y & = & x^{2}+bx+c\\
-  & = & x^{2}+2\times\dfrac{b}{2}x+c\\
-  & = & \underbrace{x^{2}+2\times\dfrac{b}{2}x+\left(\frac{b}{2}\right)^{2}}-
-      {\left(\dfrac{b}{2}\right)^{2}+c}\\
-  &  & \qquad\left(x+{\dfrac{b}{2}}\right)^{2}\\
-  & = & \left(x+\dfrac{b}{2}\right)^{2}-\left(\dfrac{b}{2}\right)^{2}+c 
-  & \left|+\left({\dfrac{b}{2}}\right)^{2}-c\right.\\
-    y+\left(\dfrac{b}{2}\right)^{2}-c & = & \left(x+
-    \dfrac{b}{2}\right)^{2} & \left|\strut(\textrm{vertex form})\right.\\
-y-y_{S} & = & (x-x_{S})^{2}\\
-S(x_{S};y_{S}) & \,\textrm{or}\, 
-    & S\left(-\dfrac{b}{2};\,\left(\dfrac{b}{2}\right)^{2}-c\right)
-\end{array} $$
+\documentclass[11pt]article
 
-<h2>Math in MathML notation</h2>
+\usepackage[english]babel
+\usepackage[utf8]inputenc
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue]hyperref
+\usepackage[a4paper,margin=1.5in]geometry
+\usepackagestackengine
+\usepackagegraphicx
+\usepackagefancyhdr
+\setlength\headheight15pt
+\usepackagemicrotype
+\usepackagetimes
+\usepackagebooktabs
 
-When <math><mi>a</mi><mo>&#x2260;</mo><mn>0</mn></math>,
-there are two solutions to <math>
-  <mi>a</mi><msup><mi>x</mi><mn>2</mn></msup>
-  <mo>+</mo> <mi>b</mi><mi>x</mi>
-  <mo>+</mo> <mi>c</mi> <mo>=</mo> <mn>0</mn>
-</math> and they are
-<math mode="display">
-  <mi>x</mi> <mo>=</mo>
-  <mrow>
-    <mfrac>
-      <mrow>
-        <mo>&#x2212;</mo>
-        <mi>b</mi>
-        <mo>&#x00B1;</mo>
-        <msqrt>
-          <msup><mi>b</mi><mn>2</mn></msup>
-          <mo>&#x2212;</mo>
-          <mn>4</mn><mi>a</mi><mi>c</mi>
-        </msqrt>
-      </mrow>
-      <mrow> <mn>2</mn><mi>a</mi> </mrow>
-    </mfrac>
-  </mrow>
-  <mtext>.</mtext>
-</math>
-</body>
+\usepackagelistings
+
+\usepackagecaption 
+\usepackagecourier 
+\usepackagearray 
+\usepackage[]algorithm2e
+
+\usepackagefloat 
+
+\usepackagesubcaption 
+<font face=symbol>Â</font>newcommand<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">}</span>[1]\mathbf#1
+
+\usepackage[backend=biber]biblatex \addbibresourcereferences.bib 
+\usepackage[numbered,framed]matlab-prettifier
+
+\frenchspacing
+\setlength<br>indent0cm \setlength<br>skip0.3cm plus1mm minus1mm
+
+\pagestylefancy
+\fancyhf
+\lheadHomework 2 Writeup - Krzysztof Palczewski (20196151)
+\rheadCS576
+\rfoot\thepage
+
+\date
+
+\title\vspace-1cmHomework 2 Writeup
+
+
+\begindocument
+\maketitle
+\vspace-3cm
+\thispagestylefancy
+
+
+<h1>Objective of the work</h1>
+
+The main goal of the work is to implement visual recognition of different environments based on feature descriptors. There are 15 labels of images and there are 100 images from each category in training, as well as test set.
+
+\beginfigure[H]
+    \centering
+     <font face=symbol>Î</font> cludegraphics[width=10cm]categories.jpg
+    <font face=symbol>Ç</font>tionExemplary images from the dataset 
+    <a name="reffig:dataset">
+
+\endfigure
+
+Process of performing visual recognition of depicted environments could be seen as a sequence of following processes:
+
+\beginfigure[H]
+    \centering
+     <font face=symbol>Î</font> cludegraphics[width=7cm]flow_scene_recognition.jpg
+    <font face=symbol>Ç</font>tionFlow chart of scene recognition scheme
+    <a name="reffig:flowchart_scene_recognition">
+
+\endfigure
+
+<h1>Building vocabulary by k-means clustering</h1>
+
+    <h2>Feature extraction</h2>
+In the exercise I used two feature extractors: Histogram of oriented gradients (HOG) and Scale-invariant feature transform (SIFT) algorithm.<br>
+
+HOG algorithm breaks image to cells, compute histogram of oriented gradients in the cells, normalize output across the block formed from cells and add up all gradients. I used \textttcv2.HOGDescriptor() function, which returns concatenated list for all feature, which has to be re-scaled to size (num\<sub>f</sub>eatures &times; 36).<br>
+
+SIFT algorithm uses scale-space extrema detection with gaussian kernel ans keypoint localization to find relevant features. I used \textttcv2.xfeatures2d.SIFT\_create() which returns list of features of size (num\<sub>f</sub>atures &times; 36). Code which performs feature extraction is shown below:
+
+\beginlstlisting[language=Python]
+def feature_extraction(img, feature):
+    """
+    This function computes defined feature (HoG, SIFT) descriptors of the target image.
+
+    :param img: a height x width x channels matrix,
+    :param feature: name of image feature representation.
+
+    :return: a N x feature_size matrix.
+    """
+
+    if feature == <font face=symbol>¢</font>HoG<font face=symbol>¢</font>:
+
+        win_size = (32, 32)
+        block_size = (32, 32)
+        block_stride = (16, 16)
+        cell_size = (16, 16)
+
+        nbins = 9
+        deriv_aperture = 1
+        win_sigma = 4
+        histogram_norm_type = 0
+        l2_hys_threshold = 2.0000000000000001e-01
+        gamma_correction = 0
+        nlevels = 64
+
+        # Your code here. You should also change the return value.
+
+        # sample visualizing
+        # cv2.imshow(<font face=symbol>¢</font>img<font face=symbol>¢</font>, img)
+
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+
+        hog = cv2.HOGDescriptor(win_size,
+                                block_size,
+                                block_stride,
+                                cell_size,
+                                nbins,
+                                deriv_aperture,
+                                win_sigma,
+                                histogram_norm_type,
+                                l2_hys_threshold,
+                                gamma_correction,
+                                nlevels)
+
+        hist = hog.compute(gray)
+        hist_resized = np.resize(hist, (int(len(hist)/36), 36))
+        hist_resized
+        return hist_resized
+
+    elif feature == <font face=symbol>¢</font>SIFT<font face=symbol>¢</font>:
+
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        sift = cv2.xfeatures2d.SIFT_create()
+        kp, des = sift.detectAndCompute(gray, None)
+
+        return des
+
+\endlstlisting
+
+    <h2>Learning visual vocabulary using K-means clustering</h2>
+After feature extraction there are multiple features for every image. To build "viusal vocabulary" from "visual words". "Visual vocabulary" is a set of unique features derived from the training set. With the assumptions that there are regions where density of real features are higher, we could find those regions by K-means clustering.
+
+\beginalgorithm[H]
+ \SetKwInOutParameterparameter
+ \KwDataVisual words
+ \KwResultList of code vectors
+ \Parametermax\_iter = 100, epsilon = 1e-4
+ Find maximum (max\_feat) and minimum value (min\_feat)<br>
+
+ of each feature <br>
+
+ Randomly assign centroids in the range \<max\_feat, min\_feat\><br>
+
+ \Whileiter &lt; max\_iter
+  assign points to nearest centroids&nbsp;&nbsp;
+  \Forevery centroid c
+    \eIfthere are any points assigned to centroid
+        compute mean of assigned points mean<sub>c</sub>;<br>
+
+        compute distance between mean of assigned points and centroid d<sub>c</sub>;<br>
+
+        change position of c to mean: c = mean<sub>c</sub>;<br>
+
+        
+        
+        leave centroid in the same place;
+        
+    \eIfd<sub>c</sub> for every centroid &lt; epsilon
+        return c
+  
+  return c
+ 
+ 
+ <font face=symbol>Ç</font>tionBuilding visual vocabulary with K-means
+\endalgorithm
+
+
+        <h3>Principle component analysis(PCA) for vocabulary</h3>
+Feature space for HOG algorithm equals 36 and for SIFT algorithm 128. Since it is impossible to visualize in a meaningful way such high dimensional data, we could use PCA for such task. PCA could be also perform as a preprocessing step to reduce the dimensionality of the data and to decrease the variance of our model.
+
+\beginfigure[H]
+\beginsubfigure.5\textwidth
+  \centering
+   <font face=symbol>Î</font> cludegraphics[width=.8\linewidth]PCA_sift_2d.png
+  <font face=symbol>Ç</font>tionFirst 2 PC for SIFT algorithm
+  <a name="reffig:PCA_sift_2d">
+
+\endsubfigure\beginsubfigure.5\textwidth
+  \centering
+   <font face=symbol>Î</font> cludegraphics[width=.8\linewidth]PCA_HOG_2d.png
+  <font face=symbol>Ç</font>tionFirst 2 PC for HOG algorithm
+  <a name="reffig:PCA_hog_2d">
+
+\endsubfigure
+<font face=symbol>Ç</font>tionFirst 2 Principal Components for SIFT and HOG algorithm
+<a name="reffig:PCA_2d">
+
+
+\beginsubfigure.5\textwidth
+  \centering
+   <font face=symbol>Î</font> cludegraphics[width=.8\linewidth]PCA_sift_3d.png
+  <font face=symbol>Ç</font>tionFirst 3 PC for SIFT algorithm
+  <a name="reffig:PCA_sift_3d">
+
+\endsubfigure\beginsubfigure.5\textwidth
+  \centering
+   <font face=symbol>Î</font> cludegraphics[width=.8\linewidth]PCA_HOG_3d.png
+  <font face=symbol>Ç</font>tionFirst 3 PC for HOG algorithm
+  <a name="reffig:PCA_hog_3d">
+
+\endsubfigure
+<font face=symbol>Ç</font>tionFirst 3 Principal Components for SIFT and HOG algorithm
+<a name="reffig:PCA_3d">
+
+\endfigure
+
+Function which performs PC extraction is shown below:
+\beginlstlisting[language=Python]
+def get_features_from_pca(feat_num, feature):
+    """
+    This function loads <font face=symbol>¢</font>vocab_sift.npy<font face=symbol>¢</font> or <font face=symbol>¢</font>vocab_hog.npg<font face=symbol>¢</font> file and
+    returns dimension-reduced vocab into 2D or 3D.
+
+    :param feat_num: 2 when we want 2D plot, 3 when we want 3D plot
+    :param feature: <font face=symbol>¢</font>Hog<font face=symbol>¢</font> or <font face=symbol>¢</font>SIFT<font face=symbol>¢</font>
+
+    :return: an N x feat_num matrix
+    """
+
+    if feature == <font face=symbol>¢</font>HoG<font face=symbol>¢</font>:
+        vocab = np.load(<font face=symbol>¢</font>vocab_hog.npy<font face=symbol>¢</font>)
+    elif feature == <font face=symbol>¢</font>SIFT<font face=symbol>¢</font>:
+        vocab = np.load(<font face=symbol>¢</font>vocab_sift.npy<font face=symbol>¢</font>)
+
+    def _get_PCA_vectors(feat_num, vocab):
+
+        mean = vocab.mean(axis=0, keepdims=True)
+        vocab_normalized = vocab - np.multiply(np.ones([vocab.shape[0], 
+            mean.shape[0]]), mean)
+        #TEST: mean unit test
+        #mean = vocab_normalized.mean(axis=0, keepdims=True)
+
+        cov_matrix = np.cov(np.transpose(vocab_normalized))
+        sigma, V = np.linalg.eig(cov_matrix)
+        order_sigma = np.argsort(sigma)
+
+        PCA_vectors = []
+        i = 1
+        for f in range(len(order_sigma)):
+            eigen_vector = V[:, order_sigma[i]]
+            if all(True for _ in np.isreal(eigen_vector)):
+                PCA_vectors.append(np.real(eigen_vector))
+                i += 1
+            if len(PCA_vectors) == feat_num:
+                break
+
+        return np.array(PCA_vectors)
+
+    #MAIN
+    PCA_vectors = _get_PCA_vectors(feat_num, vocab)
+
+    d = np.dot(vocab, np.transpose(PCA_vectors))
+
+    return np.dot(vocab, np.transpose(PCA_vectors))
+\endlstlisting
+
+<h1>Representing images from training set by frequencies of "visual words"</h1>
+I implemented 2 approaches (Bag of words and Spatial Pyramid) to combine features obtain from every image into meaningful low-dimensional input into SVM classifier.
+
+    <h2>Bag of words representation of scenes</h2>
+Bag of words implementation involve representing features of every image by code vectors of the "visual vocabulary" and combining those codevectors into normalized histogram of occurrences. Bag of words implementation doesn<font face=symbol>¢</font>t contain any information about spatial location and proximity between features.
+
+    <h2>Spatial pyramid representation</h2>
+Spatial pyramid representation is a more complex form than Bag of words, which involves also information about spatial location of features obtaining for every image. In this approach histogram of features is obtained by weighted sum of histograms for multiple levels of images. Each level of images involve 4<sup>l</sup> equal sized subimages of the original image.
+
+<h1>Multi-class SVM</h1>
+Having representation of images from training set by frequencies of "visual words" the next step is to learn SVM classifier which would be capable to recognize environments from .
+SVM classifier is a binary classifier, so to obtain the classification task between 15 classes in the model I trained 15 "one vs. all". For every image there are 15 probabilities that the class is the choosen one. In the training set for every image is chosen class which has the highest probability obtained by "one vs. all" classifier for this class. Code which executes "one vs. all" classificator is shown below:
+
+\beginlstlisting[language=Python]
+    categories = np.unique(train_labels)
+
+    categories_dict = dict(zip(np.arange(15), categories))
+
+    all_predicted_proba = np.empty([1500,1])
+
+    for c in range(len(categories)):
+        one_vs_all_labels = [1 if n == categories[c] 
+            else -1 for n in train_labels]
+        clf = svm.SVC(probability=True, gamma=<font face=symbol>¢</font>auto<font face=symbol>¢</font>, 
+            kernel=kernel_type)
+        clf.fit(train_image_feats, one_vs_all_labels)
+        predicted_proba = clf.predict_proba(test_image_feats)
+        predicted_proba = predicted_proba[:,1].
+            reshape((len(predicted_proba[:,1]),1))
+        all_predicted_proba = np.hstack((all_predicted_proba,
+                                        predicted_proba))
+
+    all_predicted_proba = all_predicted_proba[:,1:]
+
+    max_proba = np.argmax(all_predicted_proba, axis=1)
+
+    out_labels = np.array([categories_dict[x] 
+        for x in max_proba])
+
+    return out_labels
+\endlstlisting
+
+    <h2>The kernel trick</h2>
+SVM classification could be obtain by solving Dual problem:
+
+<table cellspacing=0  border=0 align=center>
+<tr>
+  <td nowrap align=center>
+     max L<sub>D</sub>(a<sub>i</sub>) = <font face=symbol>S</font><sup>l</sup>
+  </td>
+  <td nowrap align=center>
+    <sub>i=1</sub> <font face=symbol>-</font> 
+  </td>
+  <td nowrap align="center">
+    <table cellspacing=0 border=0 >
+    <tr>
+      <td nowrap align="center">
+        1
+      </td>
+    </tr>
+    </table>
+    <div class=hrcomp><hr noshade size=1></div>
+    <table cellspacing=0 border=0 >
+    <tr>
+      <td nowrap align=center>
+        2
+      </td>
+    </tr>
+    </table>
+  </td>
+  <td nowrap align=center>
+    <font face=symbol>S</font><sup>l</sup>
+  </td>
+  <td nowrap align=center>
+    <sub>i=1</sub>a<sub>i</sub>a<sub>j</sub>y<sub>i</sub>y<sub>j</sub>(<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>i</sub></span>&#183;<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>j</sub></span>)s.t.
+  </td>
+</tr>
+</table>
+
+<font face=symbol>S</font><sup>l</sup>
+</td>
+<td nowrap align=center>
+  <sub>i=1</sub>a<sub>i</sub>y<sub>i</sub> = 0 \& a<sub>i</sub> &gt;= 0 
+We obtain coefficients a by nonlinear optimization and in the training process to obtain the classification we only have to compute (<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>i</sub></span>&#183;<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>j</sub></span>), between all training examples for which a<sub>i</sub>=0 and new point (a<sub>i</sub> is non-zero only for support vectors). This term could be wraped into to different kernel functions K(<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>i</sub></span>&#183;<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>j</sub></span>) to imitate feature expansion to get non-linear SVM decision boundary.<br>
+
+
+We could use radial basis function (RBF) kernel, which we get by computing:
+
+<table cellspacing=0  border=0 align=center>
+<tr>
+  <td nowrap align=center>
+    
+K<sub>RBF</sub>(<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>i</sub></span>&#183;<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>j</sub></span>) = e<sup><font face=symbol>-</font><font face=symbol>g</font>||<span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>i</sub></span> <font face=symbol>-</font> <span style="position:relative;top:-9pt;left:6pt;"><font face="symbol" size="-1">&#174;</font></span><span style="position:relative;left:-5pt;">x<sub>j</sub></span>||<sup>2</sup>
+  </td>
+  <td nowrap align=center>
+    </sup>
+  </td>
+  <td nowrap align=center>
+    
+
+  </td>
+</tr>
+</table>
+
+When parameter <font face=symbol>g</font> is higher we place lower impact on the difference between training points and new observation, so the "area of influence of support vectors is lower" and model is prone to overfitting.
+
+<h1>Accuracy of the model</h1>
+    
+    <h2>Comparsion of SIFT and HOG performance</h2>
+In the model I used two feature exctractors SIFT and HOG.
+
+\begintabular |p3cm|p3cm|p3cm|p3cm|  
+ \hline
+ Feature extractor & Kernel & Representation & Accuracy<br>
+
+ \hline \hline
+ SIFT & Linear & Bag of words & 43.0 \%<br>
+ \hline
+ HOG & Linear & Bag of words & 41.9\%<br>
+ \hline \hline
+ SIFT & Linear & Spatial pyramid & 46.4\%<br>
+ \hline \hline
+ HOG & Linear & Spatial pyramid & 46.3\%<br>
+ \hline
+\endtabular
+<font face=symbol>Ç</font>tionoftableComparsion of overall accuracy of the model between SIFT and HOG
+    
+As shown in table 1 SIFT features has 1.1\% higher accuracy on the used dataset than HOG using Bag of words and 0.1\% higher with use Spatial pyramid. The reason could be fact that, as mentioned above SIFT features include information about spatial location of the feature. Though, in the model especially with use of Spatial pyramid increase in the accuracy is not siginificant and depending on the task Bag of words could be better choice since computational complexity for this algorithm is significantly lower than for Spatial Pyramid.
+
+    <h2>Comparsion of linear and RBF kernel</h2>
+In the model I used linear and RBF kernels SVM classifier.<br>
+
+    
+\begintabular |p3cm||p3cm|p3cm|p3cm|  
+
+ \hline
+ Feature extractor & Kernel & Representation & Accuracy<br>
+
+ \hline \hline
+ SIFT   & Linear & Bag of words & 43.0\%<br>
+ \hline
+ SIFT   & RBF & Bag of words & 17.7\%<br>
+ \hline \hline
+ HOG &   Linear  & Bag of words & 41.9\%<br>
+ \hline
+ HOG &   RBF  & Bag of words & 23.2\%<br>
+ \hline \hline
+ SIFT   & Linear & Spatial pyramid & 46.4\%<br>
+ \hline
+ SIFT   & RBF & Spatial pyramid & 46.2\%<br>
+ \hline \hline
+ HOG &   Linear  & Spatial pyramid & 46.3\%<br>
+ \hline
+ HOG &   RBF  & Spatial pyramid & 46.7\%<br>
+ 
+ \hline
+\endtabular
+<font face=symbol>Ç</font>tionoftableComparsion of overall accuracy of the model between Linear and RBF kernel
+
+\hfill \break 
+Table 2 shows the comparsion between RBF and linear kernels. For the RBF kernel I used <font face=symbol>g</font> in the <font face=symbol>¢</font>auto<font face=symbol>¢</font> mode which uses value (1)/(number\<sub>o</sub>f\<sub>f</sub>eatures). Radial kernel has much higher variance than linear kernel and SVM classifier is much more unstable than in case of linear kernel. One could see it for the Bag of words approach, when for dafault values of <font face=symbol>g</font> mode has 23.3\% and 18.7\% lower accuracy!
+
+With use of Bag of words RBF kernel has similar accuracy to linear kernel, with the best accuracy among all  models which is 46.7\%
+
+    <h2>Comparsion of Bag of Words and Spatial Pyramid</h2>
+In the model I used Bag of Words and Spatial Pyramid representation.
+
+\begintabular |p3cm||p3cm|p3cm|p3cm|  
+
+ \hline
+ Feature extractor & Kernel & Representation & Accuracy<br>
+
+ \hline \hline
+ SIFT   & Linear & Spatial pyramid & 46.4\%<br>
+ \hline 
+ SIFT   & Linear & Bag of words & 43.0\%<br>
+ \hline \hline
+ HOG &   Linear  & Spatial pyramid & 46.3\%<br>
+ \hline 
+ HOG &   Linear  & Bag of words & 41.9\%<br>
+ \hline \hline
+ SIFT   & RBF & Spatial pyramid & 46.2\%<br>
+ \hline
+ SIFT   & RBF & Bag of words & 17.7\%<br>
+ \hline \hline
+ HOG &   RBF  & Spatial pyramid & 46.7\%<br>
+ \hline 
+ HOG &   RBF  & Bag of words & 23.2\%<br>
+ \hline
+\endtabular
+<font face=symbol>Ç</font>tionoftableComparsion of overall accuracy of the model between Bag of Words and Spatial Pyramid
+\hfill \break
+Table 3 shows that on average Bag of Words has on average 2.4\% lower accuracy using linear kernel than Spatial Pyramid and 26\% lower using RBF kernel. It is a significant difference and in many more complex task, Spatial Pyramid could outperform Bag of Words.
+
+<h1>Future works</h1>
+In the further development of the model one could use Cross Validation scheme to try multiple kernels, and <font face=symbol>g</font> values. Also more training points could be used during the training process.
+
+\beginfigure[H]
+    Phys.Rev. intbibliography
+\endfigure
+
+\enddocument </body>
 </html>
